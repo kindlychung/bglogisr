@@ -17,9 +17,7 @@ logreg = function(y, x) {
 	derivJ = t(x) %*% (h-y)
 
 
-	niter = 0
 	while(1) {
-		niter = niter + 1
 		newb = b - alpha * derivJ
 		v = exp(-x %*% newb)
 		h = 1 / (1 + v)
@@ -45,13 +43,12 @@ logreg = function(y, x) {
 	# # hessian matrix of cost function
 	hess = t(x) %*% Diagonal(x = as.vector(w)) %*% x
 	seMat = sqrt(diag(solve(hess)))
-	# seMat = diag(solve(hess))
 	zscore = b / seMat
 	cbind(b, zscore)
 }
 
 nr = 5000
-nc = 15
+nc = 5
 # set.seed(17)
 x = matrix(rnorm(nr*nc, 0, 999), nr)
 x = apply(x, 2, scale)
@@ -61,7 +58,7 @@ y = round(h)
 y[1:round(nr/2)] = sample(0:1, round(nr/2), repl=T)
 
 
-ntests = 50
+ntests = 300
 testglm = function() {
 	for(i in 1:ntests) {
 		res = summary(glm(y~x, family=binomial))$coef
